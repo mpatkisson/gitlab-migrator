@@ -13,11 +13,14 @@ import java.util.Set;
  */
 public class App
 {
+    public static final String IGNORE_CERT_ERRORS = System.getProperty("IGNORE_CERT_ERRORS", "true");
+    public static final String SOURCE_URL = System.getProperty("SOURCE_URL", "https://mpatkisson.com");
+    public static final String SOURCE_TOKEN = System.getProperty("SOURCE_TOKEN", "iVyUVjcBvRLwmwQTqw91");
+    public static final String EXCEPT_MSG = "Runtime exception logged";
+
     private final String DEFAULT_ACTION = "help";
     private String[] args;
     private Map<String, Action> actions;
-
-    public static final String EXCEPT_MSG = "Runtime exception logged";
 
     /**
      * Creates a new instance.
@@ -83,5 +86,13 @@ public class App
             log.debug(e.getMessage(), e);
             log.info(EXCEPT_MSG);
         }
+    }
+
+    /**
+     * Determines if certificate errors should be ignored.
+     * @return True if cert errors should be ignored.
+     */
+    public static boolean ignoreCertErrors() {
+        return Boolean.parseBoolean(IGNORE_CERT_ERRORS);
     }
 }
