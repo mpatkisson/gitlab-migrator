@@ -1,4 +1,23 @@
+syntax: glob
+
+# Vim files
+*~
+*.swp
+*.swo
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Maven
 target/
+dist/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -6,3 +25,6 @@ pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
+
+# Log files
+*.log
