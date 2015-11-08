@@ -14,8 +14,8 @@ import java.util.Set;
 public class App
 {
     public static final String IGNORE_CERT_ERRORS = System.getProperty("IGNORE_CERT_ERRORS", "true");
-    public static final String SOURCE_URL = System.getProperty("SOURCE_URL", "https://mpatkisson.com");
-    public static final String SOURCE_TOKEN = System.getProperty("SOURCE_TOKEN", "iVyUVjcBvRLwmwQTqw91");
+    public static final String SOURCE_URL = System.getProperty("SOURCE_URL", "https://foo.com");
+    public static final String SOURCE_TOKEN = System.getProperty("SOURCE_TOKEN", "barbaz");
     public static final String EXCEPT_MSG = "Runtime exception logged";
 
     private final String DEFAULT_ACTION = "help";
