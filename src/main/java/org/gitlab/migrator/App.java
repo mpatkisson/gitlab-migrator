@@ -84,6 +84,15 @@ public class App
     }
 
     /**
+     * Gets the ID of the source project.
+     * @return
+     */
+    public static int getSourceProjectId() {
+        String id = config.getProperty("source.project.id");
+        return Integer.parseInt(id);
+    }
+
+    /**
      * Gets the URL of the destination Gitlab server.
      * @return
      */
@@ -108,6 +117,15 @@ public class App
         String ignore =
                 config.getProperty("destination.ignoreCertErrors", "false");
         return Boolean.parseBoolean(ignore);
+    }
+
+    /**
+     * Gets the ID of the destination project.
+     * @return
+     */
+    public static int getDestinationProjectId() {
+        String id = config.getProperty("destination.project.id");
+        return Integer.parseInt(id);
     }
 
     /**
