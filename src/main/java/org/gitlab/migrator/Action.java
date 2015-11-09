@@ -21,6 +21,6 @@ public abstract class Action {
      * Performs the application action.
      * @param args Command line arguments.
      */
-    public abstract void run(String[] args, GitlabAPI source);
+    public abstract void run(String[] args, GitlabAPI source, GitlabAPI dest);
 
 }

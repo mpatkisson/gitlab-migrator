@@ -24,6 +24,7 @@ public class App
     private String[] args;
     private Map<String, Action> actions;
     private GitlabAPI sourceGitlabServer = null;
+    private GitlabAPI destGitlabServer = null;
 
     /**
      * Loads configuration from file system.
@@ -51,7 +52,9 @@ public class App
         this.args = args;
 
         sourceGitlabServer = GitlabAPI.connect(getSourceUrl(), getSourceToken());
-        sourceGitlabServer.ignoreCertificateErrors(App.ignoreCertErrors());
+        sourceGitlabServer.ignoreCertificateErrors(ignoreSourceCertErrors());
+        destGitlabServer = GitlabAPI.connect(getDestinationUrl(), getDestinationToken());
+        destGitlabServer.ignoreCertificateErrors(ignoreDestinationCertErrors());
     }
 
     /**
@@ -71,11 +74,39 @@ public class App
     }
 
     /**
-     * Determines if certificate errors should be ignored.
+     * Determines if certificate errors should be ignored on the source
+     * Gitlab server.
      * @return True if cert errors should be ignored.
      */
-    public static boolean ignoreCertErrors() {
+    public static boolean ignoreSourceCertErrors() {
         String ignore = config.getProperty("source.ignoreCertErrors", "false");
+        return Boolean.parseBoolean(ignore);
+    }
+
+    /**
+     * Gets the URL of the destination Gitlab server.
+     * @return
+     */
+    public static String getDestinationUrl() {
+        return config.getProperty("destination.url");
+    }
+
+    /**
+     * Gets the API token for the destination Gitlab server.
+     * @return
+     */
+    public static String getDestinationToken() {
+        return config.getProperty("destination.token");
+    }
+
+    /**
+     * Determines if certificate errors should be ignored on the destination
+     * Gitlab server.
+     * @return True if cert errors should be ignored.
+     */
+    public static boolean ignoreDestinationCertErrors() {
+        String ignore =
+                config.getProperty("destination.ignoreCertErrors", "false");
         return Boolean.parseBoolean(ignore);
     }
 
@@ -85,7 +116,7 @@ public class App
     public void run() {
         String command = getCommand();
         Action action = getAction(command);
-        action.run(args, sourceGitlabServer);
+        action.run(args, sourceGitlabServer, destGitlabServer);
     }
 
     /**

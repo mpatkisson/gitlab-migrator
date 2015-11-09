@@ -1,7 +1,6 @@
 package org.gitlab.migrator;
 
 import org.gitlab.api.GitlabAPI;
-import org.gitlab.migrator.Action;
 
 /**
  * Displays simple help information.
@@ -14,7 +13,7 @@ public class VersionAction extends Action {
     }
 
     @Override
-    public void run(String[] args, GitlabAPI source) {
+    public void run(String[] args, GitlabAPI source, GitlabAPI dest) {
         System.out.println("0.2.0");
     }
 
