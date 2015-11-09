@@ -15,7 +15,7 @@ public class TestSourceAction extends Action {
     @Override
     public void run(String[] args, GitlabAPI source, GitlabAPI dest) {
         try {
-            source.getAllProjects();
+            source.getProjects();
             log.info("Connected to source");
         } catch (Throwable t) {
             log.info("Unable to connect to Gitlab source");
