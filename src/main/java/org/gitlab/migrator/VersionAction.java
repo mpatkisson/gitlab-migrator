@@ -1,5 +1,6 @@
 package org.gitlab.migrator;
 
+import org.gitlab.api.GitlabAPI;
 import org.gitlab.migrator.Action;
 
 /**
@@ -13,7 +14,7 @@ public class VersionAction extends Action {
     }
 
     @Override
-    public void run(String[] args) {
+    public void run(String[] args, GitlabAPI source) {
         System.out.println("0.2.0");
     }
 

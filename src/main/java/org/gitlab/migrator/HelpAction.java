@@ -1,5 +1,7 @@
 package org.gitlab.migrator;
 
+import org.gitlab.api.GitlabAPI;
+
 /**
  * Displays simple help information.
  */
@@ -11,7 +13,7 @@ public class HelpAction extends Action {
     }
 
     @Override
-    public void run(String[] args) {
+    public void run(String[] args, GitlabAPI source) {
         System.out.println("usage: java -jar gitlab-migrator.jar [COMMAND]");
         System.out.println();
         System.out.println("    test-source    - Determines if you can connect to the source Gitlab server.");

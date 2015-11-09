@@ -1,5 +1,6 @@
 package org.gitlab.migrator;
 
+import org.gitlab.api.GitlabAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,6 @@ public abstract class Action {
      * Performs the application action.
      * @param args Command line arguments.
      */
-    public abstract void run(String[] args);
+    public abstract void run(String[] args, GitlabAPI source);
 
 }

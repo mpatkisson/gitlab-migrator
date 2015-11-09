@@ -17,15 +17,13 @@ public class TestSourceAction extends Action {
     }
 
     @Override
-    public void run(String[] args) {
+    public void run(String[] args, GitlabAPI source) {
         try {
-            GitlabAPI gitlab = GitlabAPI.connect(App.SOURCE_URL, App.SOURCE_TOKEN);
-            gitlab.ignoreCertificateErrors(App.ignoreCertErrors());
-            gitlab.getAllProjects();
+            source.getAllProjects();
             log.info("Connected to source");
         } catch (Throwable t) {
             log.info("Unable to connect to Gitlab source");
-            log.debug("Exception detail was", t);
+            log.debug(App.EXCEPT_MSG, t);
         }
     }
 

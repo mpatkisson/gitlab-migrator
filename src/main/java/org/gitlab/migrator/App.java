@@ -1,11 +1,14 @@
 package org.gitlab.migrator;
 
+import org.gitlab.api.GitlabAPI;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -13,14 +16,25 @@ import java.util.Set;
  */
 public class App
 {
-    public static final String IGNORE_CERT_ERRORS = System.getProperty("IGNORE_CERT_ERRORS", "true");
-    public static final String SOURCE_URL = System.getProperty("SOURCE_URL", "https://foo.com");
-    public static final String SOURCE_TOKEN = System.getProperty("SOURCE_TOKEN", "barbaz");
     public static final String EXCEPT_MSG = "Runtime exception logged";
+    public static final Properties config = new Properties();
 
+    private static final Logger log = LoggerFactory.getLogger(App.class);
     private final String DEFAULT_ACTION = "help";
     private String[] args;
     private Map<String, Action> actions;
+    private GitlabAPI sourceGitlabServer = null;
+
+    /**
+     * Loads configuration from file system.
+     */
+    static {
+        try (FileInputStream stream = new FileInputStream("application.properties")) {
+            config.load(stream);
+        } catch (Exception e) {
+            log.debug(EXCEPT_MSG, e);
+        }
+    }
 
     /**
      * Creates a new instance.
@@ -35,6 +49,34 @@ public class App
             actions.put(action.getName(), action);
         }
         this.args = args;
+
+        sourceGitlabServer = GitlabAPI.connect(getSourceUrl(), getSourceToken());
+        sourceGitlabServer.ignoreCertificateErrors(App.ignoreCertErrors());
+    }
+
+    /**
+     * Gets the URL of the source Gitlab server.
+     * @return
+     */
+    public static String getSourceUrl() {
+        return config.getProperty("source.url");
+    }
+
+    /**
+     * Gets the API token for the source Gitlab server.
+     * @return
+     */
+    public static String getSourceToken() {
+        return config.getProperty("source.token");
+    }
+
+    /**
+     * Determines if certificate errors should be ignored.
+     * @return True if cert errors should be ignored.
+     */
+    public static boolean ignoreCertErrors() {
+        String ignore = config.getProperty("source.ignoreCertErrors", "false");
+        return Boolean.parseBoolean(ignore);
     }
 
     /**
@@ -43,7 +85,7 @@ public class App
     public void run() {
         String command = getCommand();
         Action action = getAction(command);
-        action.run(args);
+        action.run(args, sourceGitlabServer);
     }
 
     /**
@@ -88,11 +130,4 @@ public class App
         }
     }
 
-    /**
-     * Determines if certificate errors should be ignored.
-     * @return True if cert errors should be ignored.
-     */
-    public static boolean ignoreCertErrors() {
-        return Boolean.parseBoolean(IGNORE_CERT_ERRORS);
-    }
 }
