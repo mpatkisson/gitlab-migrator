@@ -3,6 +3,7 @@ package org.gitlab.migrator;
 import org.gitlab.api.GitlabAPI;
 import org.gitlab.api.models.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ public class IssuesAction extends MilestonesAction {
                 if (issue.getState().equals("closed")) {
                     created = dest.editIssue(created, GitlabIssue.Action.CLOSE);
                 }
+                saveComments(issue, created, source, dest);
                 issuesMap.put(issue.getId(), created);
                 log.debug("Issue '" + issue.getId() + "' created on destination");
             }
@@ -52,6 +54,19 @@ public class IssuesAction extends MilestonesAction {
         } catch (Throwable t) {
             log.info("Unable to migrate issues");
             log.debug(App.EXCEPT_MSG, t);
+        }
+    }
+
+    private void saveComments(
+            GitlabIssue origin,
+            GitlabIssue transferred,
+            GitlabAPI source,
+            GitlabAPI dest)
+            throws IOException {
+        List<GitlabNote> notes = source.getNotes(origin);
+        notes.sort((n1, n2) -> Integer.compare(n1.getId(), n2.getId()));
+        for (GitlabNote note : notes) {
+            dest.createNote(transferred, note.getBody());
         }
     }
 
