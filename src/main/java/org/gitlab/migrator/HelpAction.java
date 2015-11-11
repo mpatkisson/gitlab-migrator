@@ -17,6 +17,7 @@ public class HelpAction extends Action {
         System.out.println("usage: java -jar gitlab-migrator.jar [COMMAND]");
         System.out.println();
         System.out.println("    labels         - Migrates labels from source to destination.");
+        System.out.println("    issues         - Migrates issues _and_ milestones from source to destination.");
         System.out.println("    milestones     - Migrates milestones from source to destination.");
         System.out.println("    test-conns     - Determines if you can connect to both the source and destination Gitlab servers.");
         System.out.println("    test-source    - Determines if you can connect to the source Gitlab server.");

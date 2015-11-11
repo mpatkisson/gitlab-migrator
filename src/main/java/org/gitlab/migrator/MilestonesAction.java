@@ -3,12 +3,16 @@ package org.gitlab.migrator;
 import org.gitlab.api.GitlabAPI;
 import org.gitlab.api.models.GitlabMilestone;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Migrates project milestones from source to destination.
  */
 public class MilestonesAction extends Action {
+
+    protected Map<Integer, GitlabMilestone> milestonesMap = new HashMap<>();
 
     @Override
     public String getName() {
@@ -24,8 +28,9 @@ public class MilestonesAction extends Action {
             for (GitlabMilestone milestone : milestones) {
                 GitlabMilestone created = dest.createMilestone(destId, milestone);
                 if (milestone.getState().equals("closed")) {
-                    dest.updateMilestone(created, "close");
+                    created = dest.updateMilestone(created, "close");
                 }
+                milestonesMap.put(milestone.getId(), created);
                 log.debug("Milestone '" + milestone.getTitle() + "' created on destination");
             }
             log.info("milestones migrated to destination.");
